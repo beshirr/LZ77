@@ -1,24 +1,79 @@
-# file handlers (if needed)
+from LZ77 import LZ77
 
 
-# Encoding
+
+
 def encode():
-    pass
+    while True:
+        print("Encoding Options:")
+        print("1. Encode string input")
+        print("2. Encode from file")
+        print("3. Back to main menu")
+
+        choice = input("Enter your choice (1-3): ")
+
+        if choice == "1":
+            input_str = input("Enter string to encode: ")
+            result = LZ77.Encode(input_str)
+            print("\nEncoded result:")
+            for tag in result:
+                print(tag.GetFormattedTag(), end='')
+            print("\n")
+            input("Press Enter to continue...")
+
+        elif choice == "2":
+            input_path = input("Enter input file path: ")
+            output_path = input("Enter output file path: ")
+            try:
+                LZ77.EncodeFromFileIntoFile(input_path, output_path)
+                print("\nEncoding completed successfully!")
+            except Exception as e:
+                print(f"\nError: {str(e)}")
+            input("\nPress Enter to continue...")
+
+        elif choice == "3":
+            return
 
 
-# Decoding 
 def decode():
-    pass
+        print("Decoding Options:")
+        print("1. Decode string input")
+        print("2. Decode from file")
+        print("3. Back to main menu")
+
+        choice = input("Enter your choice (1-3): ")
+
+        if choice == "1":
+            # Decode
+            print("String decoding not implemented yet")
+            input("\nPress Enter to continue...")
+
+        elif choice == "2":
+            # Decode
+            print("File decoding not implemented yet")
+            input("\nPress Enter to continue...")
+
+        elif choice == "3":
+            return
 
 
-while (True):
-    choice = input("Encode (1) \nDecode (2) \nExit(0) \n-> ")
-    if choice == '0':
-        break
-    elif choice == '1':
-        encode()
-    elif choice == '2':
-        decode()
-    else:
-        print("Invalid input")
+def main():
+    while True:
+        print("LZ77 Compression Tool")
+        print("1. Encode")
+        print("2. Decode")
+        print("3. Exit")
 
+        choice = input("Enter your choice (1-3): ")
+
+        if choice == "1":
+            encode()
+        elif choice == "2":
+            decode()
+        elif choice == "3":
+            print("Goodbye!")
+            break
+
+
+if __name__ == "__main__":
+    main()
