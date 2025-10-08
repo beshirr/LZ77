@@ -1,5 +1,5 @@
 from Tag import Tag
-
+import re
 
 class LZ77:
     @staticmethod
@@ -63,6 +63,19 @@ class LZ77:
         writeFile.close()
 
 
+    '''
+    returns a list of tags tuple 
+    '''
+    @staticmethod
+    def extractTagsFromLine(line):
+        pattern = r"\((\d+),(\d+),(\w?)\)"
+        matches = re.findall(pattern, line)
+        tags : list[Tag] = []
+        for match in matches:
+            tags.append(Tag(int(match[0]), int(match[1]), match[2]))
+        return tags
+    
+
     @staticmethod
     def decode(tags: list[Tag]):
         decompressed = ""
@@ -78,6 +91,8 @@ class LZ77:
             else:
                 decompressed += decompressed[-tag.offset : -tag.offset + tag.length]
                 decompressed += tag.nextSymbol
+
+        return decompressed
 
 
         
