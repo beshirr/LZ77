@@ -95,4 +95,15 @@ class LZ77:
         return decompressed
 
 
-        
+    def decodeFromFileIntoFile(input_path, output_path):
+        readFile = open(input_path, "r")
+        writeFile = open(output_path, "w", encoding="utf-8")
+        line = readFile.readline()
+        while line:
+            tagsFromLine = LZ77.extractTagsFromLine(line)
+            decodedLine = LZ77.decode(tagsFromLine)
+            writeFile.write(decodedLine + "\n")
+            line = readFile.readline()
+
+        readFile.close()
+        writeFile.close()
