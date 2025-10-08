@@ -61,3 +61,23 @@ class LZ77:
 
         readFile.close()
         writeFile.close()
+
+
+    @staticmethod
+    def decode(tags: list[Tag]):
+        decompressed = ""
+        for tag in tags:
+            if tag.offset == 0 and tag.length == 0:
+                decompressed += tag.nextSymbol
+            
+            elif tag.length > tag.offset:
+                for i in range(tag.length):
+                    decompressed += decompressed[-tag.offset + i]
+                decompressed += tag.nextSymbol
+
+            else:
+                decompressed += decompressed[-tag.offset : -tag.offset + tag.length]
+                decompressed += tag.nextSymbol
+
+
+        
