@@ -1,8 +1,6 @@
 from LZ77 import LZ77
 
 
-
-
 def encode():
     while True:
         print("Encoding Options:")
@@ -36,32 +34,32 @@ def encode():
 
 
 def decode():
-        print("Decoding Options:")
-        print("1. Decode string input")
-        print("2. Decode from file")
-        print("3. Back to main menu")
+    print("Decoding Options:")
+    print("1. Decode string input")
+    print("2. Decode from file")
+    print("3. Back to main menu")
 
-        choice = input("Enter your choice (1-3): ")
+    choice = input("Enter your choice (1-3): ")
 
-        if choice == "1":
-            input_str = input("Enter the string to decode: ")
-            tags = LZ77.extractTagsFromLine(input_str)
-            result = LZ77.decode(tags)
-            print(result)
-            input("\nPress Enter to continue...")
+    if choice == "1":
+        input_str = input("Enter the string to decode: ")
+        tags = LZ77.extractTagsFromLine(input_str)
+        result = LZ77.decode(tags)
+        print(result)
+        input("\nPress Enter to continue...")
 
-        elif choice == "2":
-            input_path = input("Enter input file paht: ")
-            output_path = input("Enter output file path: ")
-            try:
-                LZ77.decodeFromFileIntoFile(input_path, output_path)
-                print("\nEncoding completed successfully!")
-            except Exception as e:
-                print(f"\nError: {str(e)}")
-            input("\nPress Enter to continue...")
+    elif choice == "2":
+        input_path = input("Enter input file paht: ")
+        output_path = input("Enter output file path: ")
+        try:
+            LZ77.decodeFromFileIntoFile(input_path, output_path)
+            print("\nEncoding completed successfully!")
+        except Exception as e:
+            print(f"\nError: {str(e)}")
+        input("\nPress Enter to continue...")
 
-        elif choice == "3":
-            return
+    elif choice == "3":
+        return
 
 
 def main():

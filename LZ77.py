@@ -1,9 +1,11 @@
 from Tag import Tag
 import re
 
-
 # TestCase => "ABAABABAABBBBBBBBBBBBA"
 #             "ABAABABAABBBBBBBBBBBBA"
+
+
+WINDOW_SIZE: int = 1000
 
 
 class LZ77:
@@ -35,6 +37,10 @@ class LZ77:
                 result.append(Tag(0, 0, symbol))
                 searchWindow += symbol
                 startIndex += 1
+
+                if len(searchWindow) > WINDOW_SIZE:
+                    searchWindow = searchWindow[-WINDOW_SIZE:]
+
                 continue
 
             startingWordIndex: int = -1
@@ -43,9 +49,13 @@ class LZ77:
                 startingWordIndex = LZ77.SearchForSequence(searchWindow, inpt[startIndex:startIndex + subLength])
                 subLength += 1
 
-            nextSymbol: str = "" if startIndex + subLength >= inptSize else inpt[(startIndex + subLength - 1)]
+            nextSymbol: str = "" if startIndex + subLength - 1 >= inptSize else inpt[startIndex + subLength - 1]
             result.append(Tag(len(searchWindow) - startingWordIndex, subLength - 1, nextSymbol))
             searchWindow += inpt[startIndex:startIndex + subLength]
+
+            if len(searchWindow) > WINDOW_SIZE:
+                searchWindow = searchWindow[-WINDOW_SIZE:]
+
             startIndex += subLength
 
         return result
@@ -55,6 +65,10 @@ class LZ77:
         readFile = open(inputFilePath, "r")
         writeFile = open(outputFilePath, "w", encoding="utf-8")
         line = readFile.readline()
+
+        if line and line[-1] == '\n': # removes \n at the end
+            line = line[:-1]
+
         while line:
             tagsResult: list[Tag] = LZ77.Encode(line)
             TagsAsString = ""
@@ -64,12 +78,11 @@ class LZ77:
             writeFile.write(TagsAsString + "\n")
             line = readFile.readline()
 
+            if line and line[-1] == '\n': # removes \n at the end
+                line = line[:-1]
+
         readFile.close()
         writeFile.close()
-
-    '''
-    returns a list of tags tuple 
-    '''
 
     @staticmethod
     def extractTagsFromLine(line):
