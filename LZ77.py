@@ -1,6 +1,11 @@
 from Tag import Tag
 import re
 
+
+# TestCase => "ABAABABAABBBBBBBBBBBBA"
+#             "ABAABABAABBBBBBBBBBBBA"
+
+
 class LZ77:
     @staticmethod
     def SearchForSequence(searchWindow: str, subString: str) -> int:
@@ -62,39 +67,36 @@ class LZ77:
         readFile.close()
         writeFile.close()
 
-
     '''
     returns a list of tags tuple 
     '''
+
     @staticmethod
     def extractTagsFromLine(line):
         pattern = r"\((\d+),(\d+),(\w?)\)"
         matches = re.findall(pattern, line)
-        tags : list[Tag] = []
+        tags: list[Tag] = []
         for match in matches:
             tags.append(Tag(int(match[0]), int(match[1]), match[2]))
         return tags
-    
 
+    # (0,0,A)(0,0,B)(2,1,A)(3,2,B)(5,3,B)(2,2,B)(5,5,B)(14,2,)
     @staticmethod
     def decode(tags: list[Tag]):
         decompressed = ""
+        counter: int = 0
         for tag in tags:
             if tag.offset == 0 and tag.length == 0:
                 decompressed += tag.nextSymbol
-            
-            elif tag.length > tag.offset:
-                for i in range(tag.length):
-                    decompressed += decompressed[-tag.offset + i]
-                decompressed += tag.nextSymbol
+                counter += 1
+                continue
 
-            else:
-                decompressed += decompressed[-tag.offset : -tag.offset + tag.length]
-                decompressed += tag.nextSymbol
+            decompressed += decompressed[counter - tag.offset: (counter - tag.offset) + tag.length] + tag.nextSymbol
+            counter = len(decompressed)
 
         return decompressed
 
-
+    @staticmethod
     def decodeFromFileIntoFile(input_path, output_path):
         readFile = open(input_path, "r")
         writeFile = open(output_path, "w", encoding="utf-8")
