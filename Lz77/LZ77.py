@@ -66,7 +66,7 @@ class LZ77:
         writeFile = open(outputFilePath, "w", encoding="utf-8")
         line = readFile.readline()
 
-        if line and line[-1] == '\n': # removes \n at the end
+        if line and line[-1] == '\n':  # removes \n at the end
             line = line[:-1]
 
         while line:
@@ -78,7 +78,7 @@ class LZ77:
             writeFile.write(TagsAsString + "\n")
             line = readFile.readline()
 
-            if line and line[-1] == '\n': # removes \n at the end
+            if line and line[-1] == '\n':  # removes \n at the end
                 line = line[:-1]
 
         readFile.close()
