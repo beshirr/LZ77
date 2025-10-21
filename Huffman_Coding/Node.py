@@ -1,7 +1,7 @@
 class Node:
     def __init__(self, value, character=None):
         self.value = value
-        self.character = character
+        self.character: str = character
         self.left = None
         self.right = None
 
