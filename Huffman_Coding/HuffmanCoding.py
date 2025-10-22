@@ -5,20 +5,9 @@ from Node import Node, BuildCodes
 class HuffmanCoding:
     def __init__(self):
         self.heap = []
-        self.charactersDic = {}
-        self.huffmanTreeRoot: Node = None
 
-    def isTreeBuilt(self) -> bool:
-        return self.huffmanTreeRoot is not None
-
-    def BuildHuffmanTree(self, text: str) -> Node:
-        for c in text:
-            if self.charactersDic.get(c):
-                self.charactersDic[c] += 1
-            else:
-                self.charactersDic[c] = 1
-
-        for char, freq in self.charactersDic.items():
+    def BuildHuffmanTree(self, charactersDic: dict) -> Node:
+        for char, freq in charactersDic.items():
             heapq.heappush(self.heap, (freq, char))
 
         currentRoot: Node = None
@@ -54,20 +43,26 @@ class HuffmanCoding:
                 currentRoot = newRoot
                 currentLeafs += 1
 
-        self.huffmanTreeRoot = currentRoot
         return currentRoot
 
-    def BuildTable(self, text: str) -> dict:
-        currentRoot: Node = self.BuildHuffmanTree(text)
-        codes = BuildCodes(currentRoot)
-        return codes
+    def BuildFrequencyTable(self, text: str) -> dict:
+        charactersDic: dict = {}
+        for c in text:
+            if c in charactersDic:
+                charactersDic[c] += 1
+            else:
+                charactersDic[c] = 1
 
-    def Encode(self, text: str) -> str:
-        codes = self.BuildTable(text)
+        return charactersDic
+
+    def Encode(self, text: str) -> (str, dict):
+        freqTable = self.BuildFrequencyTable(text)
+        currentRoot: Node = self.BuildHuffmanTree(freqTable)
+        codes = BuildCodes(currentRoot)
         encodedText: str = ""
         for c in text:
             encodedText += codes[c]
-        return encodedText
+        return encodedText, freqTable
 
     def EncodeFromFileIntoFile(self, inputFilePath: str, outputFilePath: str):
         readFile = open(inputFilePath, "r")
@@ -75,15 +70,19 @@ class HuffmanCoding:
 
         line = readFile.read()
         encodedResult = self.Encode(line)
-        writeFile.write(encodedResult)
+
+        writeFile.write(str(encodedResult[1]) + "\n")
+        writeFile.write(encodedResult[0])
 
         readFile.close()
         writeFile.close()
 
-    def Decode(self, encodedText: str) -> str:
+    def Decode(self, freqTable: dict, encoded_str: str) -> str:
+        binaryTreeRoot: Node = self.BuildHuffmanTree(freqTable)  # use this one
+
         pass
         # use DFS on root to decore, very simple approach
         # check if the root is None or not before doing though
 
-    def DecodeFromFileIntoFile(self, inputFilePath: str, outputFilePath: str):
+    def DecodeFromFileIntoFile(self, freqTable: dict, inputFilePath: str, outputFilePath: str):
         pass
