@@ -1,4 +1,5 @@
 import heapq
+import ast
 from Node import Node, BuildCodes
 
 
@@ -78,11 +79,38 @@ class HuffmanCoding:
         writeFile.close()
 
     def Decode(self, freqTable: dict, encoded_str: str) -> str:
-        binaryTreeRoot: Node = self.BuildHuffmanTree(freqTable)  # use this one
+        binaryTreeRoot: Node = self.BuildHuffmanTree(freqTable)  
+        if binaryTreeRoot is None:
+            return ""
 
-        pass
-        # use DFS on root to decore, very simple approach
-        # check if the root is None or not before doing though
+        if binaryTreeRoot.left is None and binaryTreeRoot.right is None:
+            total = sum(freqTable.values())
+            return binaryTreeRoot.character * total
 
-    def DecodeFromFileIntoFile(self, freqTable: dict, inputFilePath: str, outputFilePath: str):
-        pass
+        result_chars = []
+        node = binaryTreeRoot
+
+        for bit in encoded_str:
+            if bit == "0":
+                node = node.left
+            else:
+                node = node.right
+
+            if node.left is None and node.right is None:
+                result_chars.append(node.character)
+                node = binaryTreeRoot
+
+        return "".join(result_chars)
+
+    def DecodeFromFileIntoFile(self, inputFilePath: str, outputFilePath: str):
+        readFile = open(inputFilePath, 'r')
+        writeFile = open(outputFilePath, 'w')
+        line = readFile.readline()
+        freq_dict = ast.literal_eval(line)
+        line = readFile.readline()
+        decoded = self.Decode(freq_dict, line)
+        writeFile.write(decoded)
+        readFile.close()
+        writeFile.close()
+
+

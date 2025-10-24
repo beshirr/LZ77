@@ -37,17 +37,15 @@ def decode(hfm: HuffmanCoding):
     print("3. Back to main menu")
 
     choice = input("Enter your choice (1-3): ")
-
-    user_input = input("Enter character frequencies (e.g. {'a': 5, 'b': 2}): ")
-
     freq_dict = {}
-    try:
-        freq_dict = ast.literal_eval(user_input)
-    except (SyntaxError, ValueError):
-        print("Invalid input! Please enter a valid dictionary.")
-        return
 
     if choice == "1":
+        user_input = input("Enter character frequencies (e.g. {'a': 5, 'b': 2}): ")
+        try:
+            freq_dict = ast.literal_eval(user_input)
+        except (SyntaxError, ValueError):
+            print("Invalid input! Please enter a valid dictionary.")
+            return
         encoded_str = input("Enter encoded string to decode: ")
         result = hfm.Decode(freq_dict, encoded_str)
         print(result)
@@ -57,7 +55,7 @@ def decode(hfm: HuffmanCoding):
         input_path = input("Enter input file paht: ")
         output_path = input("Enter output file path: ")
         try:
-            hfm.DecodeFromFileIntoFile(freq_dict, input_path, output_path)
+            hfm.DecodeFromFileIntoFile(input_path, output_path)
             print("\nDecoding completed successfully!")
         except Exception as e:
             print(f"\nError: {str(e)}")
